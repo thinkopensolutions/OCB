@@ -957,7 +957,7 @@ class account_statement_operation_template(osv.osv):
     _description = "Preset for the lines that can be created in a bank statement reconciliation"
     _columns = {
         'name': fields.char('Button Label', required=True),
-        'account_id': fields.many2one('account.account', 'Account', ondelete='cascade', domain=[('type', 'not in', ('view', 'closed', 'consolidation'))]),
+        'account_id': fields.many2one('account.account', 'Account', ondelete='cascade', company_dependent=True, domain=[('type', 'not in', ('view', 'closed', 'consolidation'))]),
         'label': fields.char('Label'),
         'amount_type': fields.selection([('fixed', 'Fixed'),('percentage_of_total','Percentage of total amount'),('percentage_of_balance', 'Percentage of open balance')],
                                    'Amount type', required=True),
