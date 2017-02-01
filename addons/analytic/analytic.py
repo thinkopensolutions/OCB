@@ -62,6 +62,10 @@ class account_analytic_account(osv.osv):
         if context is None:
             context = {}
         child_ids = tuple(self.search(cr, uid, [('parent_id', 'child_of', ids)], context=context))
+        company_id = self.pool.get('res.users').browse(cr, uid, uid).company_id
+        # add child companies
+        company_ids = company_id.child_ids.ids
+        company_ids.append(company_id.id)
         for i in child_ids:
             res[i] =  {}
             for n in fields:
@@ -96,7 +100,7 @@ class account_analytic_account(osv.osv):
                      COALESCE(SUM(l.unit_amount),0) AS quantity
               FROM account_analytic_account a
                   LEFT JOIN account_analytic_line l ON (a.id = l.account_id)
-              WHERE a.id IN %s
+              WHERE a.id IN %s and l.company_id in """ + '(%s)' % ', '.join(map(repr, company_ids)) + """
               """ + where_date + """
               GROUP BY a.id""", where_clause_args)
         for row in cr.dictfetchall():
