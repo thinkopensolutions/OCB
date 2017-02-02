@@ -27,8 +27,19 @@ instance.web.account.bankStatementReconciliation.include({
     },
 
     start: function() {
-        return this._super().then(function() {
+    	resSuper = this._super.apply(this);
+    	var self = this;
+    	
+        res = resSuper.done(function(e){
+        	new instance.web.Model("account.statement.operation.template")
+            .query(['id','analytic_plan'])
+            .all().then(function (data) {
+                _(data).each(function(preset){
+                    self.presets[preset.id].analytic_plan = preset.analytic_plan;
+                });
+            })
         });
+        return res;
     },
 });
 

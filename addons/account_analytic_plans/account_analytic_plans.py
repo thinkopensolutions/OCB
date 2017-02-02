@@ -481,5 +481,12 @@ class account_bank_statement_line(osv.osv):
     _columns = {
         'analytics_id': fields.many2one('account.analytic.plan.instance', 'Analytic Distribution'),
     }
+    
+class account_statement_operation_template(osv.osv):
+    _inherit = "account.statement.operation.template"
+    _name = "account.statement.operation.template"
+    _columns = {
+        'analytic_plan': fields.many2one('account.analytic.plan.instance', 'Analytic Distribution'),
+    }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

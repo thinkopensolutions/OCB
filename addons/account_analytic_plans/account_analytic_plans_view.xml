@@ -253,5 +253,16 @@
             </xpath>
         </field>
     </record>
+<!-- add Analytic Distribution in template  -->
+    <record model="ir.ui.view" id="view_account_statement_operation_template_form">
+        <field name="name">account.statement.operation.template.form</field>
+        <field name="model">account.statement.operation.template</field>
+        <field name="inherit_id" ref="account.view_account_statement_operation_template_form"/>
+        <field name="arch" type="xml">
+            <xpath  expr="//field[@name='analytic_account_id']" position="replace">
+                <field name="analytic_plan"/>
+            </xpath>
+        </field>
+    </record>
 </data>
 </openerp>
