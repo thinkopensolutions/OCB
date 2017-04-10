@@ -58,7 +58,10 @@ class AccountMove(models.Model):
             if float_is_zero(total_amount, precision_rounding=move.currency_id.rounding):
                 move.matched_percentage = 1.0
             else:
-                move.matched_percentage = total_reconciled / total_amount
+                try:
+                    move.matched_percentage = total_reconciled / total_amount
+                except:
+                    move.matched_percentage = 0.0
 
     @api.one
     @api.depends('company_id')
