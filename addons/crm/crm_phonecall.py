@@ -91,6 +91,18 @@ class crm_phonecall(osv.osv):
             }
         return {'value': values}
 
+    #schedule calls if the date is greater than current date and time
+    def create(self, cr, uid, values, context=None):
+        if 'date' in values.keys():
+            if values.get('date') < fields.datetime.now():
+                values.update({'state' : 'done'})
+            else:
+                values.update({'state' : 'open'})
+        return super(crm_phonecall,self).create(cr, uid, values, context)
+
+
+
+
     def write(self, cr, uid, ids, values, context=None):
         """ Override to add case management: open/close dates """
         if values.get('state'):

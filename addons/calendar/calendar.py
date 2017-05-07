@@ -793,14 +793,15 @@ class calendar_event(osv.Model):
         date_deadline = fields.datetime.context_timestamp(cr, uid, datetime.strptime(stop, tools.DEFAULT_SERVER_DATETIME_FORMAT), context=context)
         event_date = date.strftime(format_date)
         display_time = date.strftime(format_time)
-
+        #ERROR
+        # UnicodeDecodeError: 'ascii' codec can't decode byte 0xc3 in position 3: ordinal not in range(128)
         if zallday:
-            time = _("AllDay , %s") % (event_date)
+            time = _("AllDay , %s") % (event_date.decode('utf-8'))
         elif zduration < 24:
             duration = date + timedelta(hours=zduration)
-            time = _("%s at (%s To %s) (%s)") % (event_date, display_time, duration.strftime(format_time), tz)
+            time = _("%s at (%s To %s) (%s)") % (event_date.decode('utf-8'), display_time, duration.strftime(format_time), tz)
         else:
-            time = _("%s at %s To\n %s at %s (%s)") % (event_date, display_time, date_deadline.strftime(format_date), date_deadline.strftime(format_time), tz)
+            time = _("%s at %s To\n %s at %s (%s)") % (event_date.decode('utf-8'), display_time, date_deadline.strftime(format_date), date_deadline.strftime(format_time), tz)
         return time
 
     def _compute(self, cr, uid, ids, fields, arg, context=None):

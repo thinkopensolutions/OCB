@@ -267,11 +267,18 @@ class im_chat_presence(osv.Model):
             'last_poll': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
             'status' : presences and presences[0].status or 'offline'
         }
+        # Create new cursor to avoid concurrent update errors.
+        # autocommit: our single update request will be performed atomically.
+        # (In this way, there is no opportunity to have two transactions
+        # interleaving their cr.execute()..cr.commit() calls and have one
+        # of them rolled back due to a concurrent access.)
+        cr_temp = request.registry.cursor()
+        cr_temp.autocommit(True)
         # update the user or a create a new one
         if not presences:
             vals['status'] = 'online'
             vals['user_id'] = uid
-            self.create(cr, uid, vals, context=context)
+            self.create(cr_temp, uid, vals, context=context)
         else:
             if presence:
                 vals['last_presence'] = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
@@ -284,9 +291,10 @@ class im_chat_presence(osv.Model):
             # write only if the last_poll is passed TIMEOUT, or if the status has changed
             delta = datetime.datetime.now() - datetime.datetime.strptime(presences[0].last_poll, DEFAULT_SERVER_DATETIME_FORMAT)
             if (delta > datetime.timedelta(seconds=TIMEOUT) or send_notification):
-                self.write(cr, uid, presence_ids, vals, context=context)
+                self.write(cr_temp, uid, presence_ids, vals, context=context)
         # avoid TransactionRollbackError
-        cr.commit()
+        cr_temp.commit()
+        cr_temp.close()
         # notify if the status has changed
         if send_notification:
             self.pool['bus.bus'].sendone(cr, uid, (cr.dbname,'im_chat.presence'), {'id': uid, 'im_status': vals['status']})
