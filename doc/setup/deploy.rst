@@ -221,7 +221,7 @@ HTTPS
 =====
 
 Whether it's accessed via website/web client or the webservice, Odoo transmits
-authentication information in cleatext. This means a secure deployment of
+authentication information in cleartext. This means a secure deployment of
 Odoo must use HTTPS\ [#switching]_. SSL termination can be implemented via
 just about any SSL termination proxy, but requires the following setup:
 
@@ -233,15 +233,15 @@ connections to the secure port
 
 .. warning::
 
-  In case you are using the Point of Sale module in combinaison with a `POSBox`_,
+  In case you are using the Point of Sale module in combination with a `POSBox`_,
   you must disable the HTTPS configuration for the route ``/pos/web`` to avoid
-  mix-content errors.
+  mixed-content errors.
 
 Configuration sample
 --------------------
 
 * redirect http requests to https
-* proxiing requests to odoo
+* proxy requests to odoo
 
 in ``/etc/odoo.conf`` set:
 

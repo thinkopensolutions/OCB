@@ -747,8 +747,12 @@ class BaseModel(object):
         cls = type(self)
         methods = []
         for attr, func in getmembers(cls, is_constraint):
-            if not all(name in cls._fields for name in func._constrains):
-                _logger.warning("@constrains%r parameters must be field names", func._constrains)
+            for name in func._constrains:
+                field = cls._fields.get(name)
+                if not field:
+                    _logger.warning("method %s.%s: @constrains parameter %r is not a field name", cls._name, attr, name)
+                elif not (field.store or field.column and field.column._fnct_inv):
+                    _logger.warning("method %s.%s: @constrains parameter %r is not writeable", cls._name, attr, name)
             methods.append(func)
 
         # optimization: memoize result on cls, it will not be recomputed
@@ -1040,6 +1044,8 @@ class BaseModel(object):
         :param dict context:
         :returns: {ids: list(int)|False, messages: [Message]}
         """
+        if context is None:
+            context = {}
         cr.execute('SAVEPOINT model_load')
         messages = []
 
@@ -1094,6 +1100,10 @@ class BaseModel(object):
         if any(message['type'] == 'error' for message in messages):
             cr.execute('ROLLBACK TO SAVEPOINT model_load')
             ids = False
+
+        if ids and context.get('defer_parent_store_computation'):
+            self._parent_store_compute(cr)
+
         return {'ids': ids, 'messages': messages}
 
     def _add_fake_fields(self, cr, uid, fields, context=None):
@@ -1386,7 +1396,7 @@ class BaseModel(object):
 
     def _get_default_form_view(self, cr, user, context=None):
         """ Generates a default single-line form view using all fields
-        of the current model except the m2m and o2m ones.
+        of the current model.
 
         :param cr: database cursor
         :param int user: user id
@@ -1397,7 +1407,7 @@ class BaseModel(object):
         view = etree.Element('form', string=self._description)
         group = etree.SubElement(view, 'group', col="4")
         for fname, field in self._fields.iteritems():
-            if field.automatic or field.type in ('one2many', 'many2many'):
+            if field.automatic:
                 continue
 
             etree.SubElement(group, 'field', name=fname)
@@ -1893,7 +1903,7 @@ class BaseModel(object):
         for order_part in orderby.split(','):
             order_split = order_part.split()
             order_field = order_split[0]
-            if order_field in groupby_fields:
+            if order_field == 'id' or order_field in groupby_fields:
 
                 if self._fields[order_field.split(':')[0]].type == 'many2one':
                     order_clause = self._generate_order_by(order_part, query).replace('ORDER BY ', '')
@@ -2102,7 +2112,7 @@ class BaseModel(object):
         prefix_term = lambda prefix, term: ('%s %s' % (prefix, term)) if term else ''
 
         query = """
-            SELECT min(%(table)s.id) AS id, count(%(table)s.id) AS %(count_field)s %(extra_fields)s
+            SELECT min("%(table)s".id) AS id, count("%(table)s".id) AS "%(count_field)s" %(extra_fields)s
             FROM %(from)s
             %(where)s
             %(groupby)s
@@ -3067,6 +3077,11 @@ class BaseModel(object):
             if field.compute:
                 cls._field_computed[field] = group = groups[field.compute]
                 group.append(field)
+        for fields in groups.itervalues():
+            compute_sudo = fields[0].compute_sudo
+            if not all(field.compute_sudo == compute_sudo for field in fields):
+                _logger.warning("%s: inconsistent 'compute_sudo' for computed fields: %s",
+                                self._name, ", ".join(field.name for field in fields))
 
     @api.model
     def _setup_complete(self):
@@ -3642,6 +3657,8 @@ class BaseModel(object):
             return True
         if isinstance(ids, (int, long)):
             ids = [ids]
+        if not context:
+            context = {}
 
         result_store = self._store_get_values(cr, uid, ids, self._fields.keys(), context)
 
@@ -3717,7 +3734,8 @@ class BaseModel(object):
                     obj._store_set_values(cr, uid, rids, fields, context)
 
         # recompute new-style fields
-        recs.recompute()
+        if recs.env.recompute and context.get('recompute', True):
+            recs.recompute()
 
         # auditing: deletions are infrequent and leave no trace in the database
         _unlink.info('User #%s deleted %s records with IDs: %r', uid, self._name, ids)
@@ -3801,8 +3819,7 @@ class BaseModel(object):
           ``(6, _, ids)``
               replaces all existing records in the set by the ``ids`` list,
               equivalent to using the command ``5`` followed by a command
-              ``4`` for each ``id`` in ``ids``. Can not be used on
-              :class:`~openerp.fields.One2many`.
+              ``4`` for each ``id`` in ``ids``.
 
           .. note:: Values marked as ``_`` in the list above are ignored and
                     can be anything, generally ``0`` or ``False``.
@@ -4875,7 +4892,8 @@ class BaseModel(object):
                                      if f not in default
                                      if f not in blacklist)
 
-        data = self.read(cr, uid, [id], fields_to_copy.keys(), context=context)
+        # Pass load=_classic_write to avoid useless name_get() calls
+        data = self.read(cr, uid, [id], fields_to_copy.keys(), load='_classic_write', context=context)
         if data:
             data = data[0]
         else:
@@ -4883,9 +4901,7 @@ class BaseModel(object):
 
         res = dict(default)
         for f, field in fields_to_copy.iteritems():
-            if field.type == 'many2one':
-                res[f] = data[f] and data[f][0]
-            elif field.type == 'one2many':
+            if field.type == 'one2many':
                 other = self.pool[field.comodel_name]
                 # duplicate following the order of the ids because we'll rely on
                 # it later for copying translations in copy_translation()!
