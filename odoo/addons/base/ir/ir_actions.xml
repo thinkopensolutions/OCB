@@ -355,12 +355,17 @@
                                         <p class="oe_grey oe_edit_only" style="display: inline-block; margin: 0px 0px 0px 8px;">
                                             Check to attach the newly created record to the record on which the server action runs.
                                         </p>
+                                        <div/>
+                                        <field name="link_new_record_o2m" nolabel="1" style="display: inline-block;"/>
+                                        <p class="oe_grey oe_edit_only" style="display: inline-block; margin: 0px 0px 0px 8px;">
+                                            Check to attach the current record to newly created record.
+                                        </p>
                                         <group>
                                             <field name="model_name" invisible="1"/>
                                             <field name="link_field_id"
                                                     domain="[('model_id', '=', crud_model_id), ('relation', '=', model_name), ('ttype', 'in', ['many2one'])]"
                                                     attrs="{'required': [('state', '=', 'object_create'), ('link_new_record', '=', True)],
-                                                            'invisible': ['|', ('state', '!=', 'object_create'), ('link_new_record', '=', False)]}"/>
+                                                            'invisible': ['|', ('state', '!=', 'object_create'), ('link_new_record', '=', False),('link_new_record_o2m', '=', False)]}"/>
                                         </group>
                                     </div>
 

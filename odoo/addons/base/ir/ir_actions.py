@@ -532,6 +532,9 @@ class IrActionsServer(models.Model):
     link_new_record = fields.Boolean(string='Attach the new record',
                                      help="Check this if you want to link the newly-created record "
                                           "to the current record on which the server action runs.")
+    link_new_record_o2m = fields.Boolean(string='Attach the new record',
+                                     help="Check this if you want to link the existing record to  "
+                                          "the newly created record.")
     link_field_id = fields.Many2one('ir.model.fields', string='Link using field',
                                     oldname='record_id', help="Provide the field where the record id is stored after the operations.")
     use_write = fields.Selection([('current', 'Update the current record'),
@@ -886,6 +889,9 @@ class IrActionsServer(models.Model):
         if action.link_new_record and action.link_field_id:
             record = self.env[action.model_id.model].browse(self._context.get('active_id'))
             record.write({action.link_field_id.name: res.id})
+        if action.link_new_record_o2m and action.link_field_id:
+            record = self.env[action.model_id.model].browse(self._context.get('active_id'))
+            res.write({action.link_field_id.name: record.id})
 
     @api.model
     def _get_eval_context(self, action=None):
