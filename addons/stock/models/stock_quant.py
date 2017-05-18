@@ -44,7 +44,7 @@ class Quant(models.Model):
     lot_id = fields.Many2one(
         'stock.production.lot', 'Lot/Serial Number',
         index=True, ondelete="restrict", readonly=True)
-    cost = fields.Float('Unit Cost')
+    cost = fields.Float('Unit Cost', group_operator='avg')
     owner_id = fields.Many2one(
         'res.partner', 'Owner',
         index=True, readonly=True,
@@ -537,7 +537,7 @@ class Quant(models.Model):
                 if any(quant not in self for quant in package.get_content()):
                     all_in = False
                 if all_in:
-                    destinations = [product_to_location[product] for product in package.get_content().mapped('product_id')]
+                    destinations = set([product_to_location[product] for product in package.get_content().mapped('product_id')])
                     if len(destinations) > 1:
                         all_in = False
                 if all_in:
@@ -697,7 +697,6 @@ class QuantPackage(models.Model):
             # TDE FIXME: why superuser ?
             package.mapped('quant_ids').sudo().write({'package_id': package.parent_id.id})
             package.mapped('children_ids').write({'parent_id': package.parent_id.id})
-        self.unlink()
         return self.env['ir.actions.act_window'].for_xml_id('stock', 'action_package_view')
 
     @api.multi
