@@ -18,7 +18,7 @@ Allows to automatically select analytic accounts based on criterions:
     * Date
     """,
     'website': 'https://www.odoo.com/page/accounting',
-    'depends': ['sale_stock'],
+    'depends': ['analytic', 'sale'],
     'data': [
         'security/ir.model.access.csv',
         'security/account_analytic_default_security.xml',
