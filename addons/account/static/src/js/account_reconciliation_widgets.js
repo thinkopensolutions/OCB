@@ -1755,7 +1755,7 @@ var bankStatementReconciliationLine = abstractReconciliationLine.extend({
             relation: "res.partner",
             string: _t("Partner"),
             type: "many2one",
-            domain: [['parent_id','=',false], '|', ['customer','=',true], ['supplier','=',true]],
+            //domain: [['parent_id','=',false], '|', ['customer','=',true], ['supplier','=',true]],
             help: "",
             readonly: false,
             required: true,
