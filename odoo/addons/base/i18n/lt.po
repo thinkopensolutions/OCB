@@ -12,13 +12,17 @@
 # Rytis Štreimikis <r.streimikis@hotmail.lt>, 2016
 # Zygi Mantus <zygimantus@gmail.com>, 2016
 # Rolandas <info@paninfo.lt>, 2016
+# Naglis Jonaitis <naglis@mailbox.org>, 2016
+# Monika Raciunaite <monika.raciunaite@gmail.com>, 2016
+# Antanas Muliuolis <an.muliuolis@gmail.com>, 2017
+# Aiste Sutkute <digitouchagencyeur@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-14 15:54+0000\n"
-"PO-Revision-Date: 2016-11-14 15:54+0000\n"
-"Last-Translator: Rolandas <info@paninfo.lt>, 2016\n"
+"POT-Creation-Date: 2017-01-27 11:58+0000\n"
+"PO-Revision-Date: 2017-01-27 11:58+0000\n"
+"Last-Translator: Aiste Sutkute <digitouchagencyeur@gmail.com>, 2017\n"
 "Language-Team: Lithuanian (https://www.transifex.com/odoo/teams/41243/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3885,7 +3889,7 @@ msgstr ""
 #. module: base
 #: model:ir.model,name:base.model_res_groups
 msgid "Access Groups"
-msgstr ""
+msgstr "Prieigos grupės"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_groups_menu_access
@@ -4475,7 +4479,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:base.user_groups_view
 #, python-format
 msgid "Application"
-msgstr ""
+msgstr "Modulis"
 
 #. module: base
 #: model:ir.module.module,description:base.module_web_planner
@@ -4740,6 +4744,12 @@ msgstr ""
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_module_module_auto_install
 msgid "Automatic Installation"
+msgstr ""
+
+#. module: base
+#: code:addons/base/module/module.py:650
+#, python-format
+msgid "Automatic install of downloaded Apps is currently disabled."
 msgstr ""
 
 #. module: base
@@ -5225,7 +5235,7 @@ msgstr ""
 #. module: base
 #: code:addons/base/ir/ir_model.py:549
 #, python-format
-msgid "Cannot rename field to %s, because that field already exists!"
+msgid "Cannot rename/delete fields that are still present in views:"
 msgstr ""
 
 #. module: base
@@ -5522,7 +5532,7 @@ msgstr ""
 #. module: base
 #: model:ir.actions.act_window,help:base.action_partner_category_form
 msgid "Click to create a new partner tag."
-msgstr ""
+msgstr "Spausti sukurti naują partnerio žymėjimą."
 
 #. module: base
 #: selection:ir.logging,type:0
@@ -5923,7 +5933,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:base.action_partner_category_form
 #: model:ir.ui.view,arch_db:base.view_partner_category_list
 msgid "Contact Tags"
-msgstr ""
+msgstr "Kontakto žymės"
 
 #. module: base
 #: model:ir.actions.act_window,name:base.action_partner_title_contact
@@ -6873,7 +6883,7 @@ msgstr ""
 #: model:ir.module.category,name:base.module_category_discuss
 #: model:ir.module.module,shortdesc:base.module_mail
 msgid "Discuss"
-msgstr ""
+msgstr "Diskusija"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_mail
@@ -7458,13 +7468,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:base.field_ir_ui_view_xml_id
 #: model:ir.ui.view,arch_db:base.view_window_action_form
 msgid "External ID"
-msgstr ""
+msgstr "Išorinis ID"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_model_data_name
 #: model:ir.ui.view,arch_db:base.view_model_data_search
 msgid "External Identifier"
-msgstr ""
+msgstr "Išorinis identifikatorius"
 
 #. module: base
 #: model:ir.actions.act_window,name:base.action_model_data
@@ -7473,7 +7483,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:base.view_model_data_list
 #: model:ir.ui.view,arch_db:base.view_model_data_search
 msgid "External Identifiers"
-msgstr ""
+msgstr "Išoriniai identifikatoriai"
 
 #. module: base
 #: model:ir.model.fields,help:base.field_ir_model_data_name
@@ -7653,6 +7663,19 @@ msgstr "Lauko tipas"
 #: code:addons/base/ir/ir_ui_view.py:895
 #, python-format
 msgid "Field `%(field_name)s` does not exist"
+msgstr ""
+
+#. module: base
+#: code:addons/base/ir/ir_model.py:298
+#, python-format
+msgid ""
+"Field names can only contain characters, digits and underscores (up to 63)."
+msgstr ""
+
+#. module: base
+#: code:addons/base/ir/ir_model.py:307
+#, python-format
+msgid "Field names must be unique per model."
 msgstr ""
 
 #. module: base
@@ -8311,7 +8334,7 @@ msgstr ""
 #. module: base
 #: model:ir.model,name:base.model_ir_http
 msgid "HTTP routing"
-msgstr ""
+msgstr "HTTP nukreipimas"
 
 #. module: base
 #: model:res.country,name:base.ht
@@ -9160,7 +9183,7 @@ msgstr ""
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_cron_interval_type
 msgid "Interval Unit"
-msgstr ""
+msgstr "Intervalas"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_cron_interval_number
@@ -10064,7 +10087,7 @@ msgstr "Ponia"
 #: code:addons/base/ir/ir_mail_server.py:464
 #, python-format
 msgid "Mail Delivery Failed"
-msgstr ""
+msgstr "Laiško pristatymas nesėkmingas"
 
 #. module: base
 #: code:addons/base/ir/ir_mail_server.py:462
@@ -11577,7 +11600,7 @@ msgstr "Kelias"
 #: model:ir.module.category,name:base.module_category_payment_acquirer
 #: model:ir.module.module,shortdesc:base.module_payment
 msgid "Payment Acquirer"
-msgstr ""
+msgstr "Pirkėjas"
 
 #. module: base
 #: model:ir.module.module,description:base.module_payment
@@ -11806,7 +11829,7 @@ msgstr "Prancūzijos Polinezija"
 #: model:ir.module.module,shortdesc:base.module_portal
 #: model:res.groups,name:base.group_portal
 msgid "Portal"
-msgstr ""
+msgstr "Portalas"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_portal_gamification
@@ -12257,7 +12280,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_subscription
 msgid "Recurring Documents"
-msgstr ""
+msgstr "Pasikartojantys dokumentai"
 
 #. module: base
 #: code:addons/base/module/module.py:322
@@ -12478,7 +12501,7 @@ msgstr "Privalomas"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_crm_partner_assign
 msgid "Resellers"
-msgstr ""
+msgstr "Perparavinėtojai"
 
 #. module: base
 #: code:addons/models.py:885
@@ -12919,7 +12942,7 @@ msgstr ""
 #. module: base
 #: selection:ir.property,type:0 selection:ir.translation,type:0
 msgid "Selection"
-msgstr ""
+msgstr "Pasirinkimas"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_model_fields_selection
@@ -13030,7 +13053,7 @@ msgstr "Server"
 #: model:ir.ui.view,arch_db:base.view_server_action_form
 #: model:ir.ui.view,arch_db:base.view_server_action_search
 msgid "Server Action"
-msgstr ""
+msgstr "Serverio veiksmas"
 
 #. module: base
 #: model:ir.model,name:base.model_ir_server_object_lines
@@ -13490,7 +13513,7 @@ msgstr "Gatvė"
 #: model:ir.ui.view,arch_db:base.view_partner_form
 #: model:ir.ui.view,arch_db:base.view_res_bank_form
 msgid "Street 2..."
-msgstr ""
+msgstr "Gatvė 2..."
 
 #. module: base
 #: model:ir.ui.view,arch_db:base.view_company_form
@@ -14206,6 +14229,9 @@ msgid ""
 "\n"
 "(Document type: %s, Operation: %s)"
 msgstr ""
+"Pageidaujama operacija negali būti įvykdyta dėl apsaugos draudimų. Prašome susisiekti su jūsų sistemos administratotiumi.\n"
+"\n"
+"(Dokumento tipas: %s, Operacija: %s)"
 
 #. module: base
 #: model:ir.ui.view,arch_db:base.view_base_language_install
@@ -14445,6 +14471,13 @@ msgstr ""
 #: selection:ir.module.module,state:0
 #: selection:ir.module.module.dependency,state:0
 msgid "To be upgraded"
+msgstr ""
+
+#. module: base
+#: code:addons/base/module/module.py:651
+#, python-format
+msgid ""
+"To enable it, make sure this directory exists and is writable on the server:"
 msgstr ""
 
 #. module: base
@@ -15011,7 +15044,7 @@ msgstr ""
 #. module: base
 #: model:ir.model.fields,help:base.field_res_users_login
 msgid "Used to log into the system"
-msgstr ""
+msgstr "Naudojamas prisijungimui prie sistemos"
 
 #. module: base
 #: model:ir.model.fields,help:base.field_res_company_sequence
@@ -15529,7 +15562,7 @@ msgstr ""
 #. module: base
 #: selection:ir.cron,interval_type:0
 msgid "Weeks"
-msgstr ""
+msgstr "Savaitės"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_hw_scale
@@ -15625,7 +15658,7 @@ msgstr ""
 #. module: base
 #: model:ir.model.fields,field_description:base.field_change_password_user_wizard_id
 msgid "Wizard"
-msgstr ""
+msgstr "Vedlys"
 
 #. module: base
 #: model:ir.ui.view,arch_db:base.config_wizard_step_view_search
@@ -16201,7 +16234,7 @@ msgstr "ir.actions.server"
 #. module: base
 #: model:ir.model,name:base.model_ir_attachment
 msgid "ir.attachment"
-msgstr ""
+msgstr "ir.attachment"
 
 #. module: base
 #: model:ir.model,name:base.model_ir_autovacuum
