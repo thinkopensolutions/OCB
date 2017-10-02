@@ -966,6 +966,10 @@ class IrActionsServer(models.Model):
         res = False
         for action in self:
             eval_context = self._get_eval_context(action)
+            model = eval_context.get('model')
+            active_ids = eval_context.get('records') and eval_context.get('records').ids or []
+            if not len(active_ids):
+                active_ids = [self._context.get('active_id')]
             condition = action.condition
             if condition is False:
                 # Void (aka False) conditions are considered as True
@@ -976,6 +980,9 @@ class IrActionsServer(models.Model):
                     continue
                 # call the multi method
                 run_self = self.with_context(eval_context['context'])
+
+                _logger.info("Executing server action %s with method run_action_%s_multi for model %s with IDs %s"
+                             %(action.name, action.state, model, active_ids))
                 func = getattr(run_self, 'run_action_%s_multi' % action.state)
                 res = func(action, eval_context=eval_context)
 
@@ -989,6 +996,8 @@ class IrActionsServer(models.Model):
                     expr = safe_eval(str(condition), eval_context)
                     if not expr:
                         continue
+                    _logger.info("Executing server action %s with method run_action_%s for model %s with IDs %s"
+                                 % (action.name, action.state, model, [active_id]))
                     # call the single method related to the action: run_action_<STATE>
                     func = getattr(run_self, 'run_action_%s' % action.state)
                     res = func(action, eval_context=eval_context)
