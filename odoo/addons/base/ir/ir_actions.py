@@ -967,7 +967,9 @@ class IrActionsServer(models.Model):
         for action in self:
             eval_context = self._get_eval_context(action)
             model = eval_context.get('model')
-            active_ids = eval_context.get('records').ids
+            active_ids = eval_context.get('records') and eval_context.get('records').ids or []
+            if not len(active_ids):
+                active_ids = [self._context.get('active_id')]
             condition = action.condition
             if condition is False:
                 # Void (aka False) conditions are considered as True
